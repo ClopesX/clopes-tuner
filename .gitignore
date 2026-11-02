@@ -1,0 +1,22 @@
+# Build e artefatos locais
+.gradle/
+.kotlin/
+build/
+**/build/
+local.properties
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# Material de trabalho (não faz parte do app)
+analysis/
+afinador-bundle/
+afinador-snare/
+APK_BACKUP/
+screens/
+mockup.psb
+icons/dance1.mp4
+
+icons/*.ttf
+
