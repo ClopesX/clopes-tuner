@@ -24,3 +24,7 @@ icons/*.ttf
 # Capturas e testes locais
 work/
 
+
+# Script de build local (caminhos da minha maquina)
+build.ps1
+
