@@ -98,3 +98,22 @@ fora da faixa) e 8 da sequência do conteúdo extra.
 - As fontes **Unrealised** e **Avebury** usadas no logo e no BPM têm licença
   própria; os arquivos estão no projeto para o app compilar como está.
 - O vídeo do conteúdo extra responde por quase todo o tamanho do APK.
+
+## Temas
+
+O app tem 6 temas, escolhidos em **Configurações → Tema** (ficam salvos):
+
+| Tema | Visual |
+|---|---|
+| **Escuro** | fundo sólido, cartões escuros (padrão) |
+| **Vidro** | gradiente azul→roxo, cartões translúcidos com borda em gradiente |
+| **Neon** | gradiente roxo/ciano, acento roxo e verde neon |
+| **Âmbar** | paleta quente, marrom e âmbar |
+| **Floresta** | verde profundo |
+| **Claro** | fundo claro com cartões brancos |
+
+O vídeo e a interface se adaptam ao tema, incluindo as barras do sistema.
+
+## Licença
+
+GNU General Public License v3.0 — veja [LICENSE](LICENSE).

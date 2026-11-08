@@ -137,19 +137,22 @@ class MainActivity : Activity() {
         }
     }
 
-    private val bgColor = Color.parseColor("#0b0f14")
-    private val cardColor = Color.parseColor("#111823")
-    private val activeTabColor = Color.parseColor("#1b2b45")
-    private val textColor = Color.parseColor("#e8eef7")
-    private val mutedColor = Color.parseColor("#7d8ca1")
-    private val accent = Color.parseColor("#4c8dff")
-    private val okColor = Color.parseColor("#37d67a")
-    private val warnColor = Color.parseColor("#f5a623")
-    private val badColor = Color.parseColor("#ff5c5c")
+    private lateinit var theme: AppTheme
+    private var bgColor = Palette.bg
+    private var cardColor = Palette.card
+    private var activeTabColor = Color.parseColor("#1b2b45")
+    private var textColor = Palette.text
+    private var mutedColor = Color.parseColor("#7d8ca1")
+    private var accent = Palette.accent
+    private var okColor = Palette.ok
+    private var warnColor = Palette.warn
+    private var badColor = Palette.bad
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = getSharedPreferences("clopes_tuner", MODE_PRIVATE)
+        theme = Themes.load(this)
+        applyTheme(theme)
         eggUnlocked = prefs.getBoolean(KEY_EGG_UNLOCKED, false)
         eggEnabled = prefs.getBoolean(KEY_EGG_ENABLED, true)
         keepScreenOnPref = prefs.getBoolean(KEY_KEEP_SCREEN, true)
@@ -163,6 +166,7 @@ class MainActivity : Activity() {
             handler.post { updateBeatBars(beat) }
         }
         setContentView(buildScreen())
+        applySystemBars()
     }
 
     override fun onResume() {
@@ -316,7 +320,7 @@ class MainActivity : Activity() {
         // Sem ScrollView: as telas cabem inteiras, entao nada de rolagem.
         val scroller = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setBackgroundColor(bgColor)
+            setBackgroundColor(Color.TRANSPARENT)
         }
 
         val content = LinearLayout(this).apply {
@@ -365,7 +369,7 @@ class MainActivity : Activity() {
             insets
         }
 
-        val root = FrameLayout(this).apply { setBackgroundColor(bgColor) }
+        val root = FrameLayout(this).apply { background = Themes.background(theme) }
         root.addView(scroller, FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -576,6 +580,14 @@ class MainActivity : Activity() {
         aboutRow.setOnClickListener { showAbout() }
         card.addView(aboutRow)
 
+        val themeRow = settingsRow("Tema")
+        themeRow.addView(TextView(this).apply {
+            text = theme.label
+            setTextColor(accent)
+            textSize = 14f
+        })
+        themeRow.setOnClickListener { showThemeDialog() }
+        card.addView(themeRow)
         val resetRow = settingsRow("Restaurar padrão")
         resetSwitch = settingsSwitch(false) { checked ->
             if (checked && !restoringDefaults) {
@@ -652,6 +664,58 @@ class MainActivity : Activity() {
         refreshSettingsVisibility()
         refreshMeterVisibility()
         updateKeepScreenOn()
+    }
+
+    /** Cor das barras do sistema e icones claros/escuros conforme o tema. */
+    private fun applySystemBars() {
+        val light = theme.id == "light"
+        val barColor = if (theme.cardGlass) android.graphics.Color.TRANSPARENT else theme.bg
+        window.statusBarColor = barColor
+        window.navigationBarColor = theme.bg
+        if (android.os.Build.VERSION.SDK_INT >= 30) {
+            val controller = window.decorView.windowInsetsController ?: return
+            val mask = android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or
+                android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+            controller.setSystemBarsAppearance(if (light) mask else 0, mask)
+        } else {
+            @Suppress("DEPRECATION")
+            var flags = window.decorView.systemUiVisibility
+            flags = if (light) {
+                flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+            }
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = flags
+        }
+    }
+
+    /** Aplica a paleta do tema nas cores usadas pela tela inteira. */
+    private fun applyTheme(value: AppTheme) {
+        theme = value
+        bgColor = value.bg
+        cardColor = value.card
+        activeTabColor = value.tab
+        textColor = value.text
+        mutedColor = value.muted
+        accent = value.accent
+        okColor = value.ok
+        warnColor = value.warn
+        badColor = value.bad
+        Palette.apply(value)
+    }
+
+    private fun showThemeDialog() {
+        val labels = Themes.all.map { it.label }.toTypedArray()
+        val selected = Themes.all.indexOfFirst { it.id == theme.id }.coerceAtLeast(0)
+        android.app.AlertDialog.Builder(this)
+            .setTitle("Tema")
+            .setSingleChoiceItems(labels, selected) { dialog, which ->
+                Themes.save(this, Themes.all[which])
+                dialog.dismiss()
+                recreate()
+            }
+            .show()
     }
 
     private fun showAbout() {
@@ -757,6 +821,7 @@ class MainActivity : Activity() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
             )
             text = label
+            setTextColor(textColor)
         }
         titles.addView(title)
         titles.addView(TextView(this).apply {
@@ -1056,9 +1121,9 @@ class MainActivity : Activity() {
         tuningCells.forEachIndexed { index, (cell, icon) ->
             val selected = index == selectedIndex
             cell.setBackground(
-                rounded(if (selected) Color.parseColor("#16233A") else cardColor, 18),
+                rounded(if (selected) Palette.selected else cardColor, 18),
             )
-            icon.setColorFilter(if (selected) accent else Color.parseColor("#8A97A8"))
+            icon.setColorFilter(if (selected) accent else Palette.muted)
         }
     }
 
@@ -1373,7 +1438,7 @@ class MainActivity : Activity() {
 
     private fun neighborNote(): TextView = TextView(this).apply {
         text = ""
-        setTextColor(Color.parseColor("#3d4a5c"))
+        setTextColor(Palette.muted)
         textSize = 26f
         setTypeface(typeface, Typeface.BOLD)
         gravity = Gravity.CENTER
@@ -1412,7 +1477,7 @@ class MainActivity : Activity() {
 
     private fun card(): LinearLayout = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
-        setBackground(rounded(cardColor, 18))
+        setBackground(if (theme.cardGlass) GlassCardDrawable(dp(18).toFloat(), (1.5f * resources.displayMetrics.density)) else rounded(cardColor, 18))
         setPadding(dp(16), dp(14), dp(16), dp(14))
     }
 
@@ -1453,6 +1518,13 @@ class MainActivity : Activity() {
         private const val KEY_EGG_UNLOCKED = "egg_unlocked"
     }
 }
+
+
+
+
+
+
+
 
 
 

@@ -59,9 +59,9 @@ class BeatBoxView @JvmOverloads constructor(
         bottomLine.set(padding, padding + lineHeight + gap, width - padding, height - padding)
 
         val radius = dp(7f)
-        val borderColor = if (flashing) Color.WHITE else Color.parseColor("#2b3644")
+        val borderColor = if (flashing) Color.WHITE else Palette.border
         val onColor = Color.WHITE
-        val offColor = Color.parseColor("#111823")
+        val offColor = Palette.card
 
         border.color = borderColor
 
@@ -94,3 +94,4 @@ class BeatBoxView @JvmOverloads constructor(
 
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
 }
+

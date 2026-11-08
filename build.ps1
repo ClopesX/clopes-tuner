@@ -34,10 +34,14 @@ if (-not $found) {
     throw "toolchain nao encontrado. Use -Toolchain <pasta> ou defina CLOPES_TOOLCHAIN."
 }
 
-$jdk = if ($env:JAVA_HOME -and (Test-Path $env:JAVA_HOME)) {
+# Gradle 8.9 nao roda em JDK 25: prefere o jdk21 do toolchain.
+$toolchainJdk = Join-Path $found "jdk21"
+$jdk = if (Test-Path $toolchainJdk) {
+    $toolchainJdk
+} elseif ($env:JAVA_HOME -and (Test-Path $env:JAVA_HOME)) {
     $env:JAVA_HOME
 } else {
-    Join-Path $found "jdk21"
+    throw "JDK 21 nao encontrado no toolchain e JAVA_HOME nao definido."
 }
 $sdk = if ($env:ANDROID_HOME -and (Test-Path $env:ANDROID_HOME)) {
     $env:ANDROID_HOME

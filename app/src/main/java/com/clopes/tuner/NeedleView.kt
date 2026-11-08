@@ -32,7 +32,7 @@ class NeedleView @JvmOverloads constructor(
     private val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
-        color = Color.parseColor("#1b2430")
+        color = Palette.track
         strokeWidth = dp(14f)
     }
 
@@ -40,16 +40,16 @@ class NeedleView @JvmOverloads constructor(
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
         strokeWidth = dp(9f)
-        color = Color.parseColor("#4c8dff")
+        color = Palette.accent
     }
 
     private val tickPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#2b3644")
+        color = Palette.border
         strokeWidth = dp(1.5f)
     }
 
     private val targetPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#2f7d4f")
+        color = Palette.ok
         strokeWidth = dp(3f)
         strokeCap = Paint.Cap.ROUND
     }
@@ -57,25 +57,25 @@ class NeedleView @JvmOverloads constructor(
     private val needlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = dp(5f)
         strokeCap = Paint.Cap.ROUND
-        color = Color.parseColor("#37d67a")
+        color = Palette.ok
     }
 
     private val hubPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#0b0f14")
+        color = Palette.bg
         style = Paint.Style.FILL
     }
 
     private val hubRingPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = dp(2f)
-        color = Color.parseColor("#2b3644")
+        color = Palette.border
     }
 
     private val strobePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.BUTT
         strokeWidth = dp(9f)
-        color = Color.parseColor("#2b3644")
+        color = Palette.border
     }
 
     private val arc = RectF()
@@ -176,13 +176,15 @@ class NeedleView @JvmOverloads constructor(
     }
 
     private fun tuneColor(): Int {
-        val value = cents ?: return Color.parseColor("#2b3644")
+        val value = cents ?: return Palette.border
         return when {
-            abs(value) <= 5f -> Color.parseColor("#37d67a")
-            abs(value) <= 15f -> Color.parseColor("#f5a623")
-            else -> Color.parseColor("#ff5c5c")
+            abs(value) <= 5f -> Palette.ok
+            abs(value) <= 15f -> Palette.warn
+            else -> Palette.bad
         }
     }
 
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
 }
+
+

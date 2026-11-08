@@ -19,7 +19,7 @@ class LevelMeterView @JvmOverloads constructor(
     private var levels = FloatArray(COLUMNS)
     private val peaks = FloatArray(COLUMNS)
     private val peakPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#e8eef7")
+        color = Palette.text
         style = Paint.Style.FILL
     }
     private val segmentPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -64,11 +64,11 @@ class LevelMeterView @JvmOverloads constructor(
 
                 val on = segment < lit
                 val color = when {
-                    segment >= SEGMENTS - 2 -> Color.parseColor("#ff5c5c")
-                    segment >= SEGMENTS - 4 -> Color.parseColor("#f5a623")
-                    else -> Color.parseColor("#7ef07e")
+                    segment >= SEGMENTS - 2 -> Palette.bad
+                    segment >= SEGMENTS - 4 -> Palette.warn
+                    else -> Palette.ok
                 }
-                segmentPaint.color = if (on) color else Color.parseColor("#1b2430")
+                segmentPaint.color = if (on) color else Palette.track
                 canvas.drawRect(left, top, left + columnWidth, bottom, segmentPaint)
             }
 
@@ -91,6 +91,7 @@ class LevelMeterView @JvmOverloads constructor(
         const val SEGMENTS = 14
     }
 }
+
 
 
 

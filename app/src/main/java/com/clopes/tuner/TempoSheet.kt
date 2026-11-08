@@ -33,12 +33,12 @@ class TempoSheet(
 ) {
 
     private val dialog = Dialog(context)
-    private val accent = Color.parseColor("#4C8DFF")
-    private val cardColor = Color.parseColor("#111823")
+    private val accent = Palette.accent
+    private val cardColor = Palette.card
     private val textColor = Color.WHITE
-    private val mutedColor = Color.parseColor("#8A97A8")
-    private val dividerColor = Color.parseColor("#172231")
-    private val trackColor = Color.parseColor("#3A4A5E")
+    private val mutedColor = Palette.muted
+    private val dividerColor = Palette.border
+    private val trackColor = Palette.track
 
     private lateinit var sheet: LinearLayout
     private var dismissing = false
@@ -79,7 +79,7 @@ class TempoSheet(
         }
         handleArea.addView(View(context).apply {
             background = GradientDrawable().apply {
-                setColor(Color.parseColor("#46536A"))
+                setColor(Palette.border)
                 cornerRadius = dp(3f)
             }
         }, LinearLayout.LayoutParams(dp(54f).toInt(), dp(5f).toInt()))
@@ -219,11 +219,11 @@ class TempoSheet(
         private val ring = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.STROKE
             strokeWidth = 2f * resources.displayMetrics.density
-            color = if (selected) Color.parseColor("#4C8DFF") else Color.parseColor("#5A6B80")
+            color = if (selected) Palette.accent else Palette.muted
         }
         private val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.FILL
-            color = Color.parseColor("#4C8DFF")
+            color = Palette.accent
         }
 
         override fun onDraw(canvas: Canvas) {
@@ -237,3 +237,5 @@ class TempoSheet(
         }
     }
 }
+
+

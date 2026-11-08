@@ -33,13 +33,13 @@ class TempoRingView @JvmOverloads constructor(
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
         strokeWidth = dp(22f)
-        color = Color.parseColor("#39424f")
+        color = Palette.border
     }
     private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
         strokeWidth = dp(22f)
-        color = Color.parseColor("#4c8dff")
+        color = Palette.accent
     }
     private val knobPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -114,4 +114,5 @@ class TempoRingView @JvmOverloads constructor(
 
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
 }
+
 

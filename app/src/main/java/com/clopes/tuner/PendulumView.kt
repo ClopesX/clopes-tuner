@@ -30,24 +30,24 @@ class PendulumView @JvmOverloads constructor(
     private val maxAngle = 24f
 
     private val rodPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#4c8dff")
+        color = Palette.accent
         strokeWidth = dp(5f)
         strokeCap = Paint.Cap.ROUND
     }
     private val bobPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#e8eef7")
+        color = Palette.text
         style = Paint.Style.FILL
     }
     private val glowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#37d67a")
+        color = Palette.ok
         style = Paint.Style.FILL
     }
     private val pivotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#2b3644")
+        color = Palette.border
         style = Paint.Style.FILL
     }
     private val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#1b2430")
+        color = Palette.track
         style = Paint.Style.FILL
     }
     private val triangle = Path()
@@ -117,10 +117,11 @@ class PendulumView @JvmOverloads constructor(
             glowPaint.alpha = 255
         }
 
-        bobPaint.color = if (pulseAlpha > 0.2f) Color.parseColor("#37d67a") else Color.parseColor("#e8eef7")
+        bobPaint.color = if (pulseAlpha > 0.2f) Palette.ok else Palette.text
         canvas.drawCircle(bobX, bobY, bobRadius, bobPaint)
         canvas.drawCircle(bobX, bobY, bobRadius * 0.55f, trackPaint)
     }
 
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
 }
+

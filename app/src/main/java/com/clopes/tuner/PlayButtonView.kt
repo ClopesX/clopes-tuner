@@ -35,7 +35,7 @@ class PlayButtonView @JvmOverloads constructor(
     }
     private val trianglePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = Color.parseColor("#4C8DFF")
+        color = Palette.accent
     }
     private val path = Path()
 
@@ -74,3 +74,4 @@ class PlayButtonView @JvmOverloads constructor(
 
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
 }
+
